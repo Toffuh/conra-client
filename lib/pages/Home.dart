@@ -1,5 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+
+import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -41,6 +45,11 @@ class _HomeState extends State<Home> {
               onPressed: _nameController.text.isEmpty
                   ? null
                   : () {
+                      UrlProvider urlProvider =
+                          Provider.of<UrlProvider>(context, listen: false);
+
+                      sendName(urlProvider.url);
+
                       Navigator.pushNamed(context, "/controller",
                           arguments: _nameController.text);
                     },
@@ -61,5 +70,12 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  sendName(String path) async {
+    var body = jsonEncode({"name": _nameController.text});
+    var headers = {'Content-Type': 'application/json'};
+
+    await post(Uri.parse("$path/api/join"), headers: headers, body: body);
   }
 }
