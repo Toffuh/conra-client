@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
 
   sendName(String path) async {
     var body = jsonEncode({"name": _nameController.text});
-    var headers = {'Content-Type': 'application/json'};
+    var headers = {"Content-Type": "application/json"};
 
     await post(Uri.parse("$path/api/join"), headers: headers, body: body);
   }
