@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
 
+  final String name = "test";
+  final Color color = Colors.blue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +26,9 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.lightBlue,
         title: const Text("Conra"),
         actions: [
-          IconButton(onPressed: () => {}, icon: const Icon(Icons.settings))
+          IconButton(
+              onPressed: () => Navigator.pushNamed(context, "/settings"),
+              icon: const Icon(Icons.settings))
         ],
       ),
       body: Center(
@@ -40,6 +46,31 @@ class _HomeState extends State<Home> {
                       setState(() {});
                     }),
               ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 20),
+                Container(
+                  width: 100,
+                  height: 100,
+                  color: _currentColor,
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () => _pickColor(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size(100, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      side: const BorderSide(color: Colors.black),
+                    ),
+                  ),
+                  child: const Text("Wählen Sie eine Farbe aus!"),
+                ),
+                const SizedBox(height: 20),
+              ],
             ),
             TextButton(
               onPressed: _nameController.text.isEmpty
@@ -69,6 +100,38 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+    );
+  }
+
+  Color _currentColor = Colors.blue;
+
+  void _pickColor() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Wählen Sie eine Farbe aus!"),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: _currentColor,
+              onColorChanged: (Color color) {
+                setState(() {
+                  _currentColor = color;
+                });
+              },
+              pickerAreaHeightPercent: 0.8,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Fertig"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
