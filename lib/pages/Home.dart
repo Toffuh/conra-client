@@ -1,3 +1,4 @@
+import 'package:conra_client/pages/Controller.dart';
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -16,16 +17,11 @@ class _HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
 
   final String name = "";
-  final Color color = Colors.blue;
 
   late SocketManager socketManager;
 
   @override
   void initState() {
-    UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
-
-    socketManager = SocketManager(urlProvider.url);
-
     super.initState();
   }
 
@@ -86,10 +82,10 @@ class _HomeState extends State<Home> {
               onPressed: _nameController.text.isEmpty
                   ? null
                   : () {
-                      sendColor();
-
-                      Navigator.pushNamed(context, "/controller",
-                          arguments: _nameController.text);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Controller(color: _currentColor)));
                     },
               style: TextButton.styleFrom(
                 minimumSize: const Size(100, 50),
@@ -140,9 +136,5 @@ class _HomeState extends State<Home> {
         );
       },
     );
-  }
-
-  void sendColor() {
-    socketManager.webSocketChannel?.sink.add("color:${color.toHexString()}");
   }
 }

@@ -1,22 +1,37 @@
+import 'dart:math';
+
+import 'package:conra_client/provider/gameDataProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class SocketManager {
   final String baseURL;
   WebSocketChannel? webSocketChannel;
 
-  int kills = 0;
-  int deaths = 0;
+  var context;
 
-  SocketManager(this.baseURL) {
+  SocketManager(this.baseURL, this.context) {
     connect();
   }
 
   void handleMessage(message) async {
+    //todo does not update
+    GameDataProvider gameDataProvider =
+        Provider.of<GameDataProvider>(context, listen: false);
+
+    print(message);
+
     switch (message) {
       case "kill:":
-        kills++;
-      case "death:":
-        deaths++;
+        {
+          gameDataProvider.kills++;
+          print(gameDataProvider.kills);
+        }
+      case "dead:":
+        {
+          gameDataProvider.deaths++;
+          print(gameDataProvider.deaths);
+        }
     }
   }
 

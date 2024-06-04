@@ -1,6 +1,7 @@
 import 'package:conra_client/pages/Controller.dart';
 import 'package:conra_client/pages/Home.dart';
 import 'package:conra_client/pages/Settings.dart';
+import 'package:conra_client/provider/gameDataProvider.dart';
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => UrlProvider()),
+          ChangeNotifierProvider(create: (context) => GameDataProvider()),
         ],
         child: MaterialApp(
             title: 'Flutter Demo',
@@ -28,7 +30,6 @@ class MyApp extends StatelessWidget {
             initialRoute: "/",
             routes: {
               "/": (context) => const Home(),
-              "/controller": (context) => const Controller(),
               "/settings": (context) => const Settings()
             }));
   }

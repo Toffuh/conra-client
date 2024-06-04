@@ -1,10 +1,15 @@
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:conra_client/utils/manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/gameDataProvider.dart';
+
 class Controller extends StatefulWidget {
-  const Controller({super.key});
+  final Color color;
+
+  const Controller({super.key, required this.color});
 
   @override
   State<Controller> createState() => _ControllerState();
@@ -17,9 +22,15 @@ class _ControllerState extends State<Controller> {
   void initState() {
     UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
 
-    socketManager = SocketManager(urlProvider.url);
+    socketManager = SocketManager(urlProvider.url, context);
+
+    sendColor(widget.color);
 
     super.initState();
+  }
+
+  void sendColor(Color color) {
+    socketManager.webSocketChannel?.sink.add("color:${color.toHexString()}");
   }
 
   void handleLeftPress() {
@@ -40,6 +51,9 @@ class _ControllerState extends State<Controller> {
 
   @override
   Widget build(BuildContext context) {
+    GameDataProvider gameDataProvider =
+        Provider.of<GameDataProvider>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
@@ -56,19 +70,21 @@ class _ControllerState extends State<Controller> {
           Positioned(
               left: 40,
               top: 40,
-              child:
-                  Text("Kills: ${socketManager.kills}", style: const TextStyle(fontSize: 20))),
+              child: Text("Kills: ${gameDataProvider.kills}",
+                  style: const TextStyle(fontSize: 20))),
           Positioned(
               left: 40,
               top: 60,
-              child: Text("Deaths: ${socketManager.deaths}",
+              child: Text("Deaths: ${gameDataProvider.deaths}",
                   style: const TextStyle(fontSize: 20))),
           Positioned(
               left: 40,
               top: 80,
-              child: socketManager.deaths == 0
-                  ? Text("KD: ${socketManager.kills}", style: const TextStyle(fontSize: 20))
-                  : Text("KD: ${socketManager.kills / socketManager.deaths}",
+              child: gameDataProvider.deaths == 0
+                  ? Text("KD: ${gameDataProvider.kills}",
+                      style: const TextStyle(fontSize: 20))
+                  : Text(
+                      "KD: ${gameDataProvider.kills / gameDataProvider.deaths}",
                       style: const TextStyle(fontSize: 20))),
           Positioned(
             left: 40,
@@ -83,11 +99,18 @@ class _ControllerState extends State<Controller> {
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: SizedBox(
-                  width: 40.0,
-                  height: 40.0,
+                  width: 60.0,
+                  height: 60.0,
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_circle_left_rounded,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -99,7 +122,7 @@ class _ControllerState extends State<Controller> {
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                handleRightPress();
+                handleLeftPress();
               },
               onPointerUp: (x) {
                 handleNoPress();
@@ -107,11 +130,18 @@ class _ControllerState extends State<Controller> {
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: SizedBox(
-                  width: 40.0,
-                  height: 40.0,
+                  width: 60.0,
+                  height: 60.0,
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_circle_right_rounded,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -119,20 +149,30 @@ class _ControllerState extends State<Controller> {
             ),
           ),
           Positioned(
-            right: 20,
+            right: 40,
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                handleUpPress();
+                handleLeftPress();
+              },
+              onPointerUp: (x) {
+                handleNoPress();
               },
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: SizedBox(
-                  width: 40.0,
-                  height: 40.0,
+                  width: 60.0,
+                  height: 60.0,
                   child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_circle_up_rounded,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
