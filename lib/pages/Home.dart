@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
 
-  final String name = "test";
+  final String name = "";
   final Color color = Colors.blue;
 
   @override

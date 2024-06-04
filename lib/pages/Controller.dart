@@ -1,19 +1,45 @@
-import 'package:flutter/cupertino.dart';
+import 'package:conra_client/provider/urlProvider.dart';
+import 'package:conra_client/utils/manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Controller extends StatelessWidget {
+class Controller extends StatefulWidget {
   const Controller({super.key});
+
+  @override
+  State<Controller> createState() => _ControllerState();
+}
+
+class _ControllerState extends State<Controller> {
+  late SocketManager socketManager;
+
+  @override
+  void initState() {
+    UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
+
+    socketManager = SocketManager(urlProvider.url);
+
+    super.initState();
+  }
 
   void handleLeftPress() {
     print('Left button pressed');
+    socketManager.webSocketChannel?.sink.add("direction:left");
   }
 
   void handleRightPress() {
     print('Right button pressed');
+    socketManager.webSocketChannel?.sink.add("direction:right");
   }
 
   void handleUpPress() {
     print('Up button pressed');
+    socketManager.webSocketChannel?.sink.add("jump:");
+  }
+
+  void handleNoPress() {
+    print('No button pressed');
+    socketManager.webSocketChannel?.sink.add("direction:stop");
   }
 
   @override
@@ -32,27 +58,55 @@ class Controller extends StatelessWidget {
       body: Stack(
         children: [
           Positioned(
-            left: 20,
+            left: 40,
             bottom: 40,
-            child: ElevatedButton(
-              onPressed: handleLeftPress,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  minimumSize: const Size(80, 80)),
-              child: const Icon(Icons.arrow_circle_left),
+            child: Listener(
+              onPointerDown: (details) {
+                print("down");
+                handleLeftPress();
+              },
+              onPointerUp: (x) {
+                print("up");
+                handleNoPress();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
           Positioned(
-            left: 220,
+            left: 280,
             bottom: 40,
-            child: ElevatedButton(
-              onPressed: handleRightPress,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  minimumSize: const Size(80, 80)),
-              child: const Icon(Icons.arrow_circle_right),
+            child: Listener(
+              onPointerDown: (details) {
+                print("down");
+                handleRightPress();
+              },
+              onPointerUp: (x) {
+                print("up");
+                handleNoPress();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
           Positioned(
