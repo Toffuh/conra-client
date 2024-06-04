@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/manager.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,6 +17,17 @@ class _HomeState extends State<Home> {
 
   final String name = "";
   final Color color = Colors.blue;
+
+  late SocketManager socketManager;
+
+  @override
+  void initState() {
+    UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
+
+    socketManager = SocketManager(urlProvider.url);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +86,7 @@ class _HomeState extends State<Home> {
               onPressed: _nameController.text.isEmpty
                   ? null
                   : () {
-                      UrlProvider urlProvider =
-                          Provider.of<UrlProvider>(context, listen: false);
-
-                      sendName(urlProvider.url);
+                      sendColor();
 
                       Navigator.pushNamed(context, "/controller",
                           arguments: _nameController.text);
@@ -135,10 +142,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  sendName(String path) async {
-    var body = jsonEncode({"name": _nameController.text});
-    var headers = {"Content-Type": "application/json"};
-
-    await post(Uri.parse("$path/api/join"), headers: headers, body: body);
+  void sendColor() {
+    socketManager.webSocketChannel?.sink.add("color:${color.toHexString()}");
   }
 }
