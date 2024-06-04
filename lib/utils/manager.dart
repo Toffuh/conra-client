@@ -4,12 +4,20 @@ class SocketManager {
   final String baseURL;
   WebSocketChannel? webSocketChannel;
 
+  int kills = 0;
+  int deaths = 0;
+
   SocketManager(this.baseURL) {
     connect();
   }
 
   void handleMessage(message) async {
-    print(message);
+    switch (message) {
+      case "kill:":
+        kills++;
+      case "death:":
+        deaths++;
+    }
   }
 
   void connect() {

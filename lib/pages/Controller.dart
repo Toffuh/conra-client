@@ -23,22 +23,18 @@ class _ControllerState extends State<Controller> {
   }
 
   void handleLeftPress() {
-    print('Left button pressed');
     socketManager.webSocketChannel?.sink.add("direction:left");
   }
 
   void handleRightPress() {
-    print('Right button pressed');
     socketManager.webSocketChannel?.sink.add("direction:right");
   }
 
   void handleUpPress() {
-    print('Up button pressed');
     socketManager.webSocketChannel?.sink.add("jump:");
   }
 
   void handleNoPress() {
-    print('No button pressed');
     socketManager.webSocketChannel?.sink.add("direction:stop");
   }
 
@@ -58,15 +54,30 @@ class _ControllerState extends State<Controller> {
       body: Stack(
         children: [
           Positioned(
+              left: 40,
+              top: 40,
+              child:
+                  Text("Kills: ${socketManager.kills}", style: const TextStyle(fontSize: 20))),
+          Positioned(
+              left: 40,
+              top: 60,
+              child: Text("Deaths: ${socketManager.deaths}",
+                  style: const TextStyle(fontSize: 20))),
+          Positioned(
+              left: 40,
+              top: 80,
+              child: socketManager.deaths == 0
+                  ? Text("KD: ${socketManager.kills}", style: const TextStyle(fontSize: 20))
+                  : Text("KD: ${socketManager.kills / socketManager.deaths}",
+                      style: const TextStyle(fontSize: 20))),
+          Positioned(
             left: 40,
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                print("down");
                 handleLeftPress();
               },
               onPointerUp: (x) {
-                print("up");
                 handleNoPress();
               },
               child: Padding(
@@ -88,11 +99,9 @@ class _ControllerState extends State<Controller> {
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                print("down");
                 handleRightPress();
               },
               onPointerUp: (x) {
-                print("up");
                 handleNoPress();
               },
               child: Padding(
@@ -112,13 +121,22 @@ class _ControllerState extends State<Controller> {
           Positioned(
             right: 20,
             bottom: 40,
-            child: ElevatedButton(
-              onPressed: handleUpPress,
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(20),
-                  minimumSize: const Size(80, 80)),
-              child: const Icon(Icons.arrow_circle_up),
+            child: Listener(
+              onPointerDown: (details) {
+                handleUpPress();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -137,8 +155,10 @@ class _ControllerState extends State<Controller> {
             TextButton(
               child: const Text("Ja"),
               onPressed: () {
+                socketManager.webSocketChannel?.sink.close();
+
                 Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Navigiere zurück
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
