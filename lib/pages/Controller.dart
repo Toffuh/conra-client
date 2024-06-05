@@ -34,7 +34,7 @@ class _ControllerState extends State<Controller> {
   }
 
   void sendColor(Color color) {
-    socketManager.webSocketChannel?.sink.add("color:${color.toHexString(includeHashSign: true)}");
+    socketManager.webSocketChannel?.sink.add("color:#${color.toHexString()}");
   }
 
   void handleLeftPress() {
