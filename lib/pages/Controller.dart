@@ -18,6 +18,8 @@ class Controller extends StatefulWidget {
 class _ControllerState extends State<Controller> {
   late SocketManager socketManager;
 
+  Timer? _timer;
+
   @override
   void initState() {
     UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
@@ -26,11 +28,21 @@ class _ControllerState extends State<Controller> {
 
     sendColor(widget.color);
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {});
-    });
+    _startTimer();
 
     super.initState();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   void sendColor(Color color) {
@@ -99,8 +111,7 @@ class _ControllerState extends State<Controller> {
                   : Text("KD: ${socketManager.kills / socketManager.deaths}",
                       style: const TextStyle(fontSize: 20))),
           Positioned(
-            left: 40,
-            bottom: 40,
+            bottom: -10,
             child: Listener(
               onPointerDown: (details) {
                 handleLeftPress();
@@ -130,8 +141,8 @@ class _ControllerState extends State<Controller> {
             ),
           ),
           Positioned(
-            left: 280,
-            bottom: 40,
+            left: 120,
+            bottom: -10,
             child: Listener(
               onPointerDown: (details) {
                 handleRightPress();
@@ -161,8 +172,8 @@ class _ControllerState extends State<Controller> {
             ),
           ),
           Positioned(
-            right: 40,
-            bottom: 40,
+            right: 0,
+            bottom: -10,
             child: Listener(
               onPointerDown: (details) {
                 handleUpPress();
