@@ -34,7 +34,7 @@ class _ControllerState extends State<Controller> {
   }
 
   void sendColor(Color color) {
-    socketManager.webSocketChannel?.sink.add("color:${color.toHexString()}");
+    socketManager.webSocketChannel?.sink.add("color:${color.toHexString(includeHashSign: true)}");
   }
 
   void handleLeftPress() {
@@ -134,7 +134,7 @@ class _ControllerState extends State<Controller> {
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                handleLeftPress();
+                handleRightPress();
               },
               onPointerUp: (x) {
                 handleNoPress();
@@ -165,7 +165,7 @@ class _ControllerState extends State<Controller> {
             bottom: 40,
             child: Listener(
               onPointerDown: (details) {
-                handleLeftPress();
+                handleUpPress();
               },
               onPointerUp: (x) {
                 handleNoPress();
