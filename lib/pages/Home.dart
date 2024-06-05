@@ -68,27 +68,30 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 20),
               ],
             ),
-            TextButton(
-              onPressed: _nameController.text.isEmpty
-                  ? null
-                  : () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Controller(color: _currentColor)));
-                    },
-              style: TextButton.styleFrom(
-                minimumSize: const Size(100, 50),
-                backgroundColor: _nameController.text.isEmpty
-                    ? Colors.grey
-                    : Colors.lightBlue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  side: const BorderSide(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: TextButton(
+                onPressed: _nameController.text.isEmpty
+                    ? null
+                    : () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Controller(color: _currentColor)));
+                      },
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(100, 50),
+                  backgroundColor: _nameController.text.isEmpty
+                      ? Colors.grey
+                      : Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    side: const BorderSide(color: Colors.black),
+                  ),
                 ),
+                child:
+                    const Text("Spielen", style: TextStyle(color: Colors.black)),
               ),
-              child:
-                  const Text("Spielen", style: TextStyle(color: Colors.black)),
             ),
           ],
         ),
