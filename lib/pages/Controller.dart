@@ -1,10 +1,10 @@
+import 'dart:async';
+
 import 'package:conra_client/provider/urlProvider.dart';
 import 'package:conra_client/utils/manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
-
-import '../provider/gameDataProvider.dart';
 
 class Controller extends StatefulWidget {
   final Color color;
@@ -22,9 +22,13 @@ class _ControllerState extends State<Controller> {
   void initState() {
     UrlProvider urlProvider = Provider.of<UrlProvider>(context, listen: false);
 
-    socketManager = SocketManager(urlProvider.url, context);
+    socketManager = SocketManager(urlProvider.url);
 
     sendColor(widget.color);
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
 
     super.initState();
   }
@@ -51,9 +55,6 @@ class _ControllerState extends State<Controller> {
 
   @override
   Widget build(BuildContext context) {
-    GameDataProvider gameDataProvider =
-        Provider.of<GameDataProvider>(context, listen: true);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
@@ -68,23 +69,34 @@ class _ControllerState extends State<Controller> {
       body: Stack(
         children: [
           Positioned(
+              right: 40,
+              top: 40,
+              child: SizedBox(
+                width: 60.0,
+                height: 60.0,
+                child: Container(
+                    decoration: BoxDecoration(
+                  color: widget.color,
+                  borderRadius: BorderRadius.circular(10.0),
+                )),
+              )),
+          Positioned(
               left: 40,
               top: 40,
-              child: Text("Kills: ${gameDataProvider.kills}",
+              child: Text("Kills: ${socketManager.kills}",
                   style: const TextStyle(fontSize: 20))),
           Positioned(
               left: 40,
               top: 60,
-              child: Text("Deaths: ${gameDataProvider.deaths}",
+              child: Text("Deaths: ${socketManager.kills}",
                   style: const TextStyle(fontSize: 20))),
           Positioned(
               left: 40,
               top: 80,
-              child: gameDataProvider.deaths == 0
-                  ? Text("KD: ${gameDataProvider.kills}",
+              child: socketManager.kills == 0
+                  ? Text("KD: ${socketManager.kills}",
                       style: const TextStyle(fontSize: 20))
-                  : Text(
-                      "KD: ${gameDataProvider.kills / gameDataProvider.deaths}",
+                  : Text("KD: ${socketManager.kills / socketManager.kills}",
                       style: const TextStyle(fontSize: 20))),
           Positioned(
             left: 40,

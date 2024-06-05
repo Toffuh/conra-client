@@ -1,10 +1,6 @@
 import 'package:conra_client/pages/Controller.dart';
-import 'package:conra_client/provider/urlProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:provider/provider.dart';
-
-import '../utils/manager.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,13 +13,7 @@ class _HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
 
   final String name = "";
-
-  late SocketManager socketManager;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  Color _currentColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +95,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  Color _currentColor = Colors.blue;
 
   void _pickColor() {
     showDialog(

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class UrlProvider extends ChangeNotifier {
   String _url =
-      "localhost:8765/";
+      "192.168.137.98:8765/";
 
   UrlProvider();
 
