@@ -88,7 +88,7 @@ class _ControllerState extends State<Controller> {
           Positioned(
               left: 40,
               top: 60,
-              child: Text("Deaths: ${socketManager.kills}",
+              child: Text("Deaths: ${socketManager.deaths}",
                   style: const TextStyle(fontSize: 20))),
           Positioned(
               left: 40,
@@ -96,7 +96,7 @@ class _ControllerState extends State<Controller> {
               child: socketManager.kills == 0
                   ? Text("KD: ${socketManager.kills}",
                       style: const TextStyle(fontSize: 20))
-                  : Text("KD: ${socketManager.kills / socketManager.kills}",
+                  : Text("KD: ${socketManager.kills / socketManager.deaths}",
                       style: const TextStyle(fontSize: 20))),
           Positioned(
             left: 40,

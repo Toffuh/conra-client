@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: Center(
-        child: Column(
+        child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 32.0),
