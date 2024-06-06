@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController _nameController = TextEditingController();
 
-  final String name = "";
+  String name = "";
   Color _currentColor = Colors.blue;
 
   @override
@@ -39,7 +39,9 @@ class _HomeState extends State<Home> {
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: "Ihr Name"),
                     onChanged: (value) {
-                      setState(() {});
+                      setState(() {
+                        name = _nameController.text;
+                      });
                     }),
               ),
             ),
@@ -77,7 +79,8 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Controller(color: _currentColor)));
+                                builder: (context) => Controller(
+                                    color: _currentColor, name: name)));
                       },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(100, 50),
@@ -89,8 +92,8 @@ class _HomeState extends State<Home> {
                     side: const BorderSide(color: Colors.black),
                   ),
                 ),
-                child:
-                    const Text("Spielen", style: TextStyle(color: Colors.black)),
+                child: const Text("Spielen",
+                    style: TextStyle(color: Colors.black)),
               ),
             ),
           ],

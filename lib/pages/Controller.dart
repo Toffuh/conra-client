@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class Controller extends StatefulWidget {
   final Color color;
+  final String name;
 
-  const Controller({super.key, required this.color});
+  const Controller({super.key, required this.color, required this.name});
 
   @override
   State<Controller> createState() => _ControllerState();
@@ -83,6 +84,11 @@ class _ControllerState extends State<Controller> {
           Positioned(
               right: 40,
               top: 40,
+              child: Text("Name: ${widget.name}",
+                  style: const TextStyle(fontSize: 20))),
+          Positioned(
+              right: 40,
+              top: 70,
               child: SizedBox(
                 width: 60.0,
                 height: 60.0,
@@ -105,10 +111,11 @@ class _ControllerState extends State<Controller> {
           Positioned(
               left: 40,
               top: 80,
-              child: socketManager.kills == 0
+              child: socketManager.deaths == 0
                   ? Text("KD: ${socketManager.kills}",
                       style: const TextStyle(fontSize: 20))
-                  : Text("KD: ${socketManager.kills / socketManager.deaths}",
+                  : Text(
+                      "KD: ${(socketManager.kills / socketManager.deaths).toStringAsFixed(2)}",
                       style: const TextStyle(fontSize: 20))),
           Positioned(
             bottom: -10,
@@ -177,9 +184,6 @@ class _ControllerState extends State<Controller> {
             child: Listener(
               onPointerDown: (details) {
                 handleUpPress();
-              },
-              onPointerUp: (x) {
-                handleNoPress();
               },
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
