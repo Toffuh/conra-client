@@ -14,13 +14,9 @@ class SocketManager {
   void handleMessage(message) async {
     switch (message) {
       case "kill:":
-        {
-          kills++;
-        }
+        kills++;
       case "dead:":
-        {
-          deaths++;
-        }
+        deaths++;
     }
   }
 
